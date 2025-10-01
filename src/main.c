@@ -28,97 +28,94 @@
 
 
 
-/* ----------------------------------------------------------------------------
-   -- DEFINE
-   ---------------------------------------------------------------------------- */
-/* BEGIN DEFINE */
-// --- Core Define ---
-#define GPIO_PIN_INPUT		1
-#define GPIO_PIN_OUTPUT 	0
-#define TICK_SYS          1000
-
-// --- Application Define ---
-#define LED_RED x
-#define LED_GREEN x
-#define LED_YELLOW x
-/* END DEFINE */
-
 
 /* ----------------------------------------------------------------------------
-   -- MACRO
+   -- DEFINE AND MACRO
    ---------------------------------------------------------------------------- */
-/* BEGIN MACRO */
-/* END MACRO */
+/**
+ * @brief Định nghĩa cho hướng của chân GPIO.
+ */
+#define GPIO_PIN_INPUT      0
+#define GPIO_PIN_OUTPUT     1
+
+/**
+ * @brief Định nghĩa các thông số cho đèn LED xanh.
+ */
+#define BLUE_LED_PIN        	0U
+#define RED_LED_PIN        		15U
+#define GREEN_LED_PIN        	16U
+
+#define BLUE_LED_PORT       	IP_PORTD
+#define RED_LED_PORT       		IP_PORTD
+#define GREEN_LED_PORT       	IP_PORTD
+
+#define BLUE_LED_GPIO       	IP_PTD
+#define RED_LED_GPIO       		IP_PTD
+#define GREEN_LED_GPIO       	IP_PTD
 
 
 /* ----------------------------------------------------------------------------
    -- FUNCTION PROTOTIES
    ---------------------------------------------------------------------------- */
-/* BEGIN FP */
-
-// --- Hàm Hệ thống ---
-
-// --- Hàm Liên quan đến GPIO ---
+/**
+ * @brief Cấp clock cho một Port GPIO.
+ */
 void GPIO_EnableClock(uint8_t index);
-void GPIO_InitPin(PORT_Type *port, GPIO_Type *gpio_port, uint8_t pin_number, int gpio_mode);
-void GPIO_LedToggle(GPIO_Type *gpio_port, uint8_t pin_number);
-void GPIO_LedSet(GPIO_Type *gpio_port, uint8_t pin_number);
-void GPIO_LedReset(GPIO_Type *gpio_port, uint8_t pin_number);
-
-// --- Hàm Ứng dụng ---
-
-/* END FP */
-
-
-
 
 /**
- * @brief
- * @note
- * @param[in]
+ * @brief Cấu hình một chân GPIO là Input hoặc Output.
  */
+void GPIO_InitPin(PORT_Type *port, GPIO_Type *gpio_port, uint8_t pin_number, int gpio_mode);
 
+/**
+ * @brief Đảo trạng thái một chân GPIO.
+ */
+void GPIO_LedToggle(GPIO_Type *gpio_port, uint8_t pin_number);
+
+/**
+ * @brief Bật một chân GPIO lên mức cao.
+ */
+void GPIO_LedSet(GPIO_Type *gpio_port, uint8_t pin_number);
+
+/**
+ * @brief Bật một chân GPIO lên mức thấp.
+ */
+void GPIO_LedReset(GPIO_Type *gpio_port, uint8_t pin_number);
+
+/**
+ * @brief Khởi tạo và chuyển đổi clock hệ thống sang SPLL.
+ */
+void Clock_Init_System_SPLL(void);
+
+/**
+ * @brief Chương trình ứng dụng
+ */
+void App_ControlLedADC(void);
 
 
 /* ----------------------------------------------------------------------------
    -- MAIN FUNCTION
    ---------------------------------------------------------------------------- */
-/* BEGIN MF */
 int main(void)
 {
 
 
     return 0;
 }
-/* END MF */
 
 
 /* ----------------------------------------------------------------------------
    -- SYSTEM FUNCTION
    ---------------------------------------------------------------------------- */
-/* BEGIN SF */
-void delay_cycles(volatile uint32_t count) {
-    while (count--)
-    {
-    	for(int i = TICK_SYS; i >= 0; i--)
-    	{
-        __asm("nop"); // No Operation (đảm bảo compiler không tối ưu mất)
-        }
-    }
-}
+void Clock_Init_System_SPLL(void)
+{
 
-/* END SF */
+}
 
 
 /* ----------------------------------------------------------------------------
    -- GPIO DEFINE FUNCTION
    ---------------------------------------------------------------------------- */
-/* BEGIN GDF */
-/**
- * @brief
- * @note
- * @param[in]
- */
 void GPIO_InitPin(PORT_Type *port, GPIO_Type *gpio_port, uint8_t pin_number, int gpio_mode)
 {
 	// --1. Cấu hình MUX: để set chân pin của port thành 1 GPIO
@@ -135,64 +132,32 @@ void GPIO_InitPin(PORT_Type *port, GPIO_Type *gpio_port, uint8_t pin_number, int
 	}
 }
 
-
-/**
- * @brief
- * @note
- * @param[in]
- */
 void GPIO_EnableClock(uint8_t index)
 {
 	// --1. set clock for port
 	IP_PCC->PCCn[index] |= PCC_PCCn_CGC_MASK;
 }
 
-
-/**
- * @brief
- * @note
- * @param[in]
- */
 void GPIO_LedToggle(GPIO_Type *gpio_port, uint8_t pin_number)
 {
 	gpio_port->PTOR |= (1UL << pin_number);
 }
 
-/**
- * @brief
- * @note
- * @param[in]
- */
 void GPIO_LedSet(GPIO_Type *gpio_port, uint8_t pin_number)
 {
 	gpio_port->PSOR |= (1UL << pin_number);
 }
-/**
- * @brief
- * @note
- * @param[in]
- */
+
 void GPIO_LedReset(GPIO_Type *gpio_port, uint8_t pin_number)
 {
 	gpio_port->PCOR |= (1UL << pin_number);
-}
-/* END GDF */
-
-
-/* ----------------------------------------------------------------------------
-   -- TIMER DEFINE FUNCTION
-   ---------------------------------------------------------------------------- */
-/* BEGIN GDF */
-void TIM_Init(void)
-{
-
 }
 
 
 /* ----------------------------------------------------------------------------
    -- APPLICATION FUNCTION
    ---------------------------------------------------------------------------- */
-/* BEGIN AF */
+void App_ControlLedADC(void)
+{
 
-/* END AF */
-
+}
